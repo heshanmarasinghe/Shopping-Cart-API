@@ -26,27 +26,24 @@ ordersRouter.post('/', (req, res) => {
             .send("Last Name cannot be empty!!!");
         }  
         
-        // req.body.orderItems.forEach(function(item) {
-        //     let orderItem = Order.orderItems[{
-        //         productId: item.productId,
-        //         productName: item.productName,
-        //         productPrice: item.productPrice,
-        //     }]; 
-        //     console.log(orderItem)
-        //   });
+            let newOrder = new Order({
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                orderTotal: req.body.orderTotal,
+                orderCurrency: req.body.orderCurrency
+            });
+                        
+            var orderItemsArray = [];
+            req.body.orderItems.forEach(function(item){
+               var obj = {
+                  "productId": item.productId,
+                  "productName": item.productName,
+                  "productPrice": item.productPrice
+               }
+               orderItemsArray.push(obj);
+            }); 
 
-    let newOrder = new Order({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        orderTotal: req.body.orderTotal,
-        orderCurrency: req.body.orderCurrency,
-        orderItems : [{
-            productId: req.body.orderItems.productId,
-            productName: req.body.orderItems.productName,
-            productPrice: req.body.orderItems.productPrice,
-        }]     
-          
-    });
+            newOrder.orderItems = orderItemsArray            
 
         newOrder.save()
         return res.status(200).send("Order Created Successfully!!");
