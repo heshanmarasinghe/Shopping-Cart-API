@@ -17,6 +17,6 @@ const userSchema = new mongoose.Schema({
     telephone: String
 })
 
-const user = mongoose.model("Product", userSchema);
+const user = mongoose.model("User", userSchema);
 
 module.exports = user;
