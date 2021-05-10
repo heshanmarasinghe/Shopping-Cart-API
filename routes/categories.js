@@ -1,8 +1,8 @@
 const express = require('express');
 const Category = require('../models/category');
-const categoryRouter = express.Router();
+const categoriesRouter = express.Router();
 
-categoryRouter.get('/', async (req, res) => {
+categoriesRouter.get('/', async (req, res) => {
     try {
         let category = await Category.find();
         return res.send(category);
@@ -13,7 +13,7 @@ categoryRouter.get('/', async (req, res) => {
 })
 
 //Create a new category
-categoryRouter.post('/', (req, res) => {
+categoriesRouter.post('/', (req, res) => {
     try {
         if(!req.body.categoryType) {
         return res.status(400)
@@ -32,3 +32,4 @@ categoryRouter.post('/', (req, res) => {
     }
     
 })
+module.exports = categoriesRouter;

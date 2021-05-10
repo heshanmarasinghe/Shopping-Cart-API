@@ -6,13 +6,13 @@ const mongoose = require('mongoose');
 const authentication = require("./middleware/authentication");
 const products = require("./routes/products");
 const orders = require("./routes/orders");
-const category = require("./routes/category")
+const categories = require("./routes/categories")
 
 app.use(express.json());
 app.use(authentication);
 app.use("/api/products/", products);
 app.use("/api/orders/", orders);
-app.use("/api/category/", category);
+app.use("/api/categories/", categories);
 
  mongoose.connect('mongodb://localhost/ShoppingCart', {
   useNewUrlParser: true,
