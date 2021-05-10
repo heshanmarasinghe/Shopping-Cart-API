@@ -43,7 +43,11 @@ productsRouter.post('/', (req, res) => {
     let newProduct = new Product({
         productName: req.body.productName,
         productDescription: req.body.productDescription,
-        productPrice: req.body.productPrice
+        productCategory: req.body.productCategory,
+        productGender: req.body.productGender,
+        productBrand: req.body.productBrand,    
+        productPrice: req.body.productPrice,
+        productDateAdded: Date.now()
     });
 
         newProduct.save()
@@ -70,7 +74,10 @@ productsRouter.put('/:id', async (req, res) => {
         selectedProduct.set({ 
             productName: req.body.productName,
             productDescription: req.body.productDescription,
-            productPrice: req.body.productPrice
+            productCategory: req.body.productCategory,
+            productGender: req.body.productGender,
+            productBrand: req.body.productBrand,    
+            productPrice: req.body.productPrice,
          });
          await selectedProduct.save();
          return res.status(200).send("Product Updated Successfully!!");

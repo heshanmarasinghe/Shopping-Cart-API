@@ -27,10 +27,15 @@ ordersRouter.post('/', (req, res) => {
         }  
         
             let newOrder = new Order({
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
+                customerFirstName: req.body.firstName,
+                customerLastName: req.body.lastName,
                 orderTotal: req.body.orderTotal,
-                orderCurrency: req.body.orderCurrency
+                customerAddress: req.body.customerAddress,
+                customerEmail: req.body.customerEmail,
+                orderTotal: req.body.orderTotal,
+                orderCurrency: req.body.orderCurrency,
+                orderDateAdded: Date.now(),
+                orderPaymentMethod: req.body.orderPaymentMethod
             });
                         
             var orderItemsArray = [];
