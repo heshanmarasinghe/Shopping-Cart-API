@@ -4,7 +4,7 @@ const categorySchema = new mongoose.Schema({
     categoryType: {
         type: String,
         required: true
-    }
+    },
     
 })
 

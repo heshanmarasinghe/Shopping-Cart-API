@@ -7,7 +7,7 @@ categoriesRouter.get('/', async (req, res) => {
         let category = await Category.find();
         return res.send(category);
     }
-    catch(ex) {
+    catch (ex) {
         return res.status(500).send("Error :" + ex.Message);
     }
 })
@@ -15,14 +15,14 @@ categoriesRouter.get('/', async (req, res) => {
 //Create a new category
 categoriesRouter.post('/', (req, res) => {
     try {
-        if(!req.body.categoryType) {
-        return res.status(400)
-             .send("Type cannot be empty!!!");
-     }
+        if (!req.body.categoryType) {
+            return res.status(400)
+                .send("Category type cannot be empty!!!");
+        }
 
-    let newCategory = new Category({
-        categoryType: req.body.categoryType
-    });
+        let newCategory = new Category({
+            categoryType: req.body.categoryType
+        });
 
         newCategory.save()
         return res.status(200).send("Category Saved Successfully!!");
@@ -30,6 +30,6 @@ categoriesRouter.post('/', (req, res) => {
     catch (ex) {
         return res.status(500).send("Error :" + ex.Message);
     }
-    
+
 })
 module.exports = categoriesRouter;

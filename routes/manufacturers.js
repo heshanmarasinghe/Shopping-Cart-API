@@ -12,4 +12,29 @@ manufacturersRouter.get('/', async (req, res) => {
     }
 })
 
+manufacturersRouter.post('/',(req, res) => {
+
+    try {
+        if(!req.body.manufacturerName) {
+        return res.status(400)
+             .send("manufacturer cannot be empty!!!");
+     }
+
+    let newManufacturer = new Manufacturer({
+        manufacturerName: req.body.manufacturerName,
+        country: req.body.country
+    });
+
+    newManufacturer.save()
+        return res.status(200).send("manufacturer Saved Successfully!!");
+    }
+    catch (ex) {
+        return res.status(500).send("Error :" + ex.Message);
+    }
+    
+
+})
+
+
+
 module.exports = manufacturersRouter;
