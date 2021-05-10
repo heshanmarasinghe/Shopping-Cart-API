@@ -1,11 +1,11 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
-    firstName: {
+    customerFirstName: {
         type: String,
         required: true
     },
-    lastName: {
+    customerLastName: {
         type: String,
         required: true
     },
@@ -14,8 +14,12 @@ const orderSchema = new mongoose.Schema({
         productName: String,
         productPrice: Number
     }],    
+    customerAddress: String,
+    customerEmail: String,
     orderTotal: Number,
-    orderCurrency: String
+    orderCurrency: String,
+    orderDateAdded: Date,
+    orderPaymentMethod: String
 })
 
 const order = mongoose.model("Order", orderSchema);
