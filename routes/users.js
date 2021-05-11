@@ -21,7 +21,7 @@ usersRouter.get("/login", (req, res) => {
             if (error) res.status(500).json(error);
             else if (match)
               res.status(200).json({ token: generateToken(user) });
-            else res.status(403).json({ error: "incorrect password" });
+            else res.status(403).json({ error: "Incorrect password" });
           }
         );
       }
@@ -35,36 +35,18 @@ usersRouter.post("/signup", (req, res) => {
   bcrypt.hash(req.body.password, rounds, (error, hash) => {
     if (error) res.status(500).json(error);
     else {
+
       const newUser = User({
         email: req.body.email,
         role: req.body.role,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        userAddress: req.body.userAddress,
+        contactNumber: req.body.contactNumber,
         password: hash,
       });
 
-      var userNameArray = [];
-      req.body.userName.forEach(function (item) {
-        var objuserName = {
-          fisrtName: item.fisrtName,
-          lastName: item.lastName,
-        };
-        userNameArray.push(objuserName);
-      });
-
-      var userAddressArray = [];
-      req.body.userAddress.forEach(function (item) {
-        var objuserAddress = {
-          addLine1: item.addLine1,
-          addLine2: item.addLine2,
-          addLine3: item.addLine3,
-        };
-        userAddressArray.push(objuserAddress);
-      });
-
-      newUser.userAddress = userAddressArray;
-      newUser.userName = userNameArray;
-
-      newUser
-        .save()
+      newUser.save()
         .then((user) => {
           res.status(200).json({ token: generateToken(user) });
         })
