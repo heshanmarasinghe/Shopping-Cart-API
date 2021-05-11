@@ -8,7 +8,7 @@ const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
 
 //login users
-usersRouter.get("/login", (req, res) => {
+usersRouter.post("/login", (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user)
