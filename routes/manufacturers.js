@@ -52,4 +52,21 @@ manufacturersRouter.put("/:id", async (req, res) => {
   }
 });
 
+//Delete a Manufacturer
+manufacturersRouter.delete("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deleteManufacturer = await Manufacturer.findById(id);
+
+    if (deleteManufacturer == null) {
+      return res.status(404).send("Manufacturer Not Available!!!");
+    }
+
+    deleteManufacturer.deleteOne({ _id: id });
+    return res.status(200).send("Manufacturer Deleted Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 module.exports = manufacturersRouter;
