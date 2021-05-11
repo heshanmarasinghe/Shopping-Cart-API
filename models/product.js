@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   productPrice: Number,
   productDateAdded: Date,
   productQuantity:Number,
+  productManufacturer: String,
 });
 
 const product = mongoose.model("Product", productSchema);

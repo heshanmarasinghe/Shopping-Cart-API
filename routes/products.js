@@ -44,6 +44,7 @@ productsRouter.post("/", (req, res) => {
       productPrice: req.body.productPrice,
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
+      productManufacturer: req.body.productManufacturer,
     });
 
     newProduct.save();
@@ -71,6 +72,7 @@ productsRouter.put("/:id", async (req, res) => {
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
       productQuantity: req.body.productQuantity,
+      productManufacturer: req.body.productManufacturer,
     });
     await selectedProduct.save();
     return res.status(200).send("Product Updated Successfully!!");
