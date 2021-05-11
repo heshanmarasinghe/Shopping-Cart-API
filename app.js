@@ -4,6 +4,7 @@ const port = 3000;
 
 const authentication = require("./middleware/authentication");
 const dbConnection = require("./config/db");
+const cors = require('cors');
 const products = require("./routes/products");
 const orders = require("./routes/orders");
 const categories = require("./routes/categories");
@@ -14,6 +15,7 @@ const productTypes = require("./routes/productTypes");
 
 app.use(express.json());
 app.use(authentication);
+app.use(cors());
 dbConnection();
 
 app.use("/api/products/", products);
@@ -23,7 +25,6 @@ app.use("/api/users/", users);
 app.use("/api/manufacturers/", manufacturers);
 app.use("/api/brands/", brands);
 app.use("/api/productTypes/", productTypes);
-
 
 app.listen(port, () => {
     console.log("App listening at :" +port);
