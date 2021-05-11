@@ -9,6 +9,8 @@ const orders = require("./routes/orders");
 const categories = require("./routes/categories");
 const users = require("./routes/users");
 const manufacturers = require("./routes/manufacturers");
+const brands = require("./routes/brands");
+const productTypes = require("./routes/productTypes");
 
 app.use(express.json());
 app.use(authentication);
@@ -17,6 +19,8 @@ app.use("/api/orders/", orders);
 app.use("/api/categories/", categories);
 app.use("/api/users/", users);
 app.use("/api/manufacturers/", manufacturers);
+app.use("/api/brands/", brands);
+app.use("/api/productTypes/", productTypes);
 
  mongoose.connect('mongodb://localhost/ShoppingCart', {
   useNewUrlParser: true,

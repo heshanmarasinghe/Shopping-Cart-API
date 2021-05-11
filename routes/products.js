@@ -39,10 +39,11 @@ productsRouter.post("/", (req, res) => {
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productCategory: req.body.productCategory,
-      productGender: req.body.productGender,
+      productType: req.body.productType,
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
       productDateAdded: Date.now(),
+      productQuantity: req.body.productQuantity,
     });
 
     newProduct.save();
@@ -66,9 +67,10 @@ productsRouter.put("/:id", async (req, res) => {
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productCategory: req.body.productCategory,
-      productGender: req.body.productGender,
+      productType: req.body.productType,
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
+      productQuantity: req.body.productQuantity,
     });
     await selectedProduct.save();
     return res.status(200).send("Product Updated Successfully!!");
