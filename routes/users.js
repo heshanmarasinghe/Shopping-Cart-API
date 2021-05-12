@@ -73,7 +73,7 @@ usersRouter.post("/signup", (req, res) => {
 
 usersRouter.get("/", async (req, res) => {
   try {
-    let user = await User.find({ role: 1 });
+    let user = await User.find({ role: 2 });
     return res.send(user);
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
