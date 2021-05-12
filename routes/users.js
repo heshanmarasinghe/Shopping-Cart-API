@@ -6,6 +6,9 @@ const rounds = 10;
 const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
+const cors = require("cors");
+
+usersRouter.use(cors());
 
 //login users
 usersRouter.get("/login", (req, res) => {

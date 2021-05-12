@@ -1,6 +1,7 @@
 const express = require("express");
 const Category = require("../models/category");
 const categoriesRouter = express.Router();
+const cors = require("cors");
 
 categoriesRouter.use(cors());
 

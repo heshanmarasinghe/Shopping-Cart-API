@@ -1,6 +1,9 @@
 const express = require("express");
 const Brand = require("../models/brand");
 const brandsRouter = express.Router();
+const cors = require("cors");
+
+brandsRouter.use(cors());
 
 //Get all Brands
 brandsRouter.get("/", async (req, res) => {

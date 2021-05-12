@@ -1,6 +1,9 @@
 const express = require("express");
 const Manufacturer = require("../models/manufacturer");
 const manufacturersRouter = express.Router();
+const cors = require("cors");
+
+manufacturersRouter.use(cors());
 
 //get all manufacturers
 manufacturersRouter.get("/", async (req, res) => {
