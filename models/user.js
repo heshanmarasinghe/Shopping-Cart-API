@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
   lastName: String,
   userAddress: String,
   contactNumber: Number,
+  isActive: Boolean,
   password: {
     type: String,
     required: true,

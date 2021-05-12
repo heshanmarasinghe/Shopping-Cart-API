@@ -48,6 +48,7 @@ usersRouter.post("/signup", (req, res) => {
               lastName: req.body.lastName,
               userAddress: req.body.userAddress,
               contactNumber: req.body.contactNumber,
+              isActive: true,
               password: hash,
             });
             newUser
@@ -73,7 +74,7 @@ usersRouter.post("/signup", (req, res) => {
 
 usersRouter.get("/", async (req, res) => {
   try {
-    let user = await User.find({ role: 2 });
+    let user = await User.find();
     return res.send(user);
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
@@ -113,6 +114,7 @@ usersRouter.put("/:id", async (req, res) => {
       lastName: req.body.lastName,
       userAddress: req.body.userAddress,
       contactNumber: req.body.contactNumber,
+      isActive: req.body.isActive
     });
     await selectedUser.save();
     return res.status(200).send("User Updated Successfully!!");

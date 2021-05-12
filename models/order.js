@@ -23,6 +23,7 @@ const orderSchema = new mongoose.Schema({
   orderCurrency: String,
   orderDateAdded: Date,
   orderPaymentMethod: String,
+  orderStatus: String
 });
 
 const order = mongoose.model("Order", orderSchema);
