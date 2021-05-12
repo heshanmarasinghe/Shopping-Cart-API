@@ -53,6 +53,7 @@ ordersRouter.post("/", (req, res) => {
       orderCurrency: req.body.orderCurrency,
       orderDateAdded: Date.now(),
       orderPaymentMethod: req.body.orderPaymentMethod,
+      orderStatus: "1"
     });
 
     var orderItemsArray = [];
@@ -69,6 +70,26 @@ ordersRouter.post("/", (req, res) => {
 
     newOrder.save();
     return res.status(200).send("Order Created Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+//Update a Order Status
+ordersRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedOrder = await Order.findById(id);
+
+    if (selectedOrder == null) {
+      return res.status(404).send("Order Not Available!!!");
+    }
+
+    selectedOrder.set({
+      orderStatus: req.body.orderStatus,
+    });
+    await selectedOrder.save();
+    return res.status(200).send("Order Status Updated Successfully!!");
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }
