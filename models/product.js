@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
   productBrand: String,
   productPrice: Number,
   productDateAdded: Date,
-  productQuantity:Number,
+  productQuantity: Number,
   productManufacturer: String,
 });
 

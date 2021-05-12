@@ -6,6 +6,9 @@ const rounds = 10;
 const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
+const cors = require("cors");
+
+usersRouter.use(cors());
 
 //login users
 usersRouter.post("/login", (req, res) => {
@@ -19,9 +22,9 @@ usersRouter.post("/login", (req, res) => {
           user.password.toString(),
           (error, match) => {
             if (error) res.status(500).json(error);
-            else if (match)
+            else if (match) {
               res.status(200).json({ token: generateToken(user) });
-            else res.status(403).json({ error: "Incorrect password" });
+            } else res.status(403).json({ error: "Incorrect password" });
           }
         );
       }
@@ -35,7 +38,6 @@ usersRouter.post("/signup", (req, res) => {
   bcrypt.hash(req.body.password, rounds, (error, hash) => {
     if (error) res.status(500).json(error);
     else {
-
       const newUser = User({
         email: req.body.email,
         role: req.body.role,
@@ -46,7 +48,8 @@ usersRouter.post("/signup", (req, res) => {
         password: hash,
       });
 
-      newUser.save()
+      newUser
+        .save()
         .then((user) => {
           res.status(200).json({ token: generateToken(user) });
         })
