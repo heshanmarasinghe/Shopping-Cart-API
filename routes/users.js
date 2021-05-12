@@ -11,7 +11,7 @@ const cors = require("cors");
 usersRouter.use(cors());
 
 //login users
-usersRouter.post("/login", (req, res) => {
+usersRouter.get("/login", (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user)
@@ -58,6 +58,32 @@ usersRouter.post("/signup", (req, res) => {
         });
     }
   });
+});
+
+usersRouter.get("/", async (req, res) => {
+  try {
+    let user = await User.find();
+    return res.send(user);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+//Delete a user
+usersRouter.delete("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deleteUser = await User.findById(id);
+
+    if (deleteUser == null) {
+      return res.status(404).send("User Not Available!!!");
+    }
+
+    deleteUser.deleteOne({ _id: id });
+    return res.status(200).send("User Deleted Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
 });
 
 usersRouter.get("/jwt-test", middleware.verify, (req, res) => {
