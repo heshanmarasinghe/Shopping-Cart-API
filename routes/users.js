@@ -69,6 +69,47 @@ usersRouter.get("/", async (req, res) => {
   }
 });
 
+//Get One User
+usersRouter.get("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedUser = await User.findById(id);
+
+    if (selectedUser == null) {
+      return res.status(404).send("Product Not Available!!!");
+    }
+
+    return res.status(200).send(selectedUser);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+//Update a User
+usersRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedUser = await User.findById(id);
+
+    if (selectedUser == null) {
+      return res.status(404).send("User Not Available!!!");
+    }
+
+    selectedUser.set({
+      email: req.body.email,
+      role: req.body.role,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      userAddress: req.body.userAddress,
+      contactNumber: req.body.contactNumber,
+    });
+    await selectedUser.save();
+    return res.status(200).send("User Updated Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Delete a user
 usersRouter.delete("/:id", async (req, res) => {
   try {
