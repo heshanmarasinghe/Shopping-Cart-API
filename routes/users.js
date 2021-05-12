@@ -73,7 +73,7 @@ usersRouter.post("/signup", (req, res) => {
 
 usersRouter.get("/", async (req, res) => {
   try {
-    let user = await User.find();
+    let user = await User.find({ role: 1 });
     return res.send(user);
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
@@ -87,7 +87,7 @@ usersRouter.get("/userby/:id", async (req, res) => {
     let selectedUser = await User.findById(id);
 
     if (selectedUser == null) {
-      return res.status(404).send("Product Not Available!!!");
+      return res.status(404).send("User Not Available!!!");
     }
 
     return res.status(200).send(selectedUser);
