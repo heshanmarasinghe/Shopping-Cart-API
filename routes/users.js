@@ -11,7 +11,7 @@ const cors = require("cors");
 usersRouter.use(cors());
 
 //login users
-usersRouter.get("/login", (req, res) => {
+usersRouter.post("/login", (req, res) => {
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user)
