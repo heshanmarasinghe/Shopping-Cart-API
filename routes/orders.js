@@ -15,6 +15,22 @@ ordersRouter.get("/", async (req, res) => {
   }
 });
 
+//Get Order for Customer
+ordersRouter.get("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedOrder = await Order.find({ customerId: id });
+
+    if (selectedOrder == null) {
+      return res.status(404).send("Orders Not Available!!!");
+    }
+
+    return res.status(200).send(selectedOrder);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Create a new Order
 ordersRouter.post("/", (req, res) => {
   try {
@@ -27,6 +43,7 @@ ordersRouter.post("/", (req, res) => {
     }
 
     let newOrder = new Order({
+      customerId: req.body.customerId,
       customerFirstName: req.body.firstName,
       customerLastName: req.body.lastName,
       orderTotal: req.body.orderTotal,
@@ -57,7 +74,7 @@ ordersRouter.post("/", (req, res) => {
   }
 });
 
-//Delete a Product
+//Delete a Order
 ordersRouter.delete("/:id", async (req, res) => {
   try {
     let id = req.params.id;
