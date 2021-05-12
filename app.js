@@ -1,9 +1,11 @@
-const express = require('express');
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 3000;
 
 const authentication = require("./middleware/authentication");
 const dbConnection = require("./config/db");
+
 const products = require("./routes/products");
 const orders = require("./routes/orders");
 const categories = require("./routes/categories");
@@ -13,7 +15,9 @@ const brands = require("./routes/brands");
 const productTypes = require("./routes/productTypes");
 
 app.use(express.json());
+app.use(cors());
 app.use(authentication);
+
 dbConnection();
 
 app.use("/api/products/", products);
@@ -24,7 +28,6 @@ app.use("/api/manufacturers/", manufacturers);
 app.use("/api/brands/", brands);
 app.use("/api/productTypes/", productTypes);
 
-
 app.listen(port, () => {
-    console.log("App listening at :" +port);
-})
+  console.log("App listening at :" + port);
+});

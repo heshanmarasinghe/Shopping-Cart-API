@@ -20,8 +20,8 @@ usersRouter.get("/login", (req, res) => {
           (error, match) => {
             if (error) res.status(500).json(error);
             else if (match) {
-              res.status(200).json({ token: generateToken(user) });}
-            else res.status(403).json({ error: "Incorrect password" });
+              res.status(200).json({ token: generateToken(user) });
+            } else res.status(403).json({ error: "Incorrect password" });
           }
         );
       }
@@ -35,7 +35,6 @@ usersRouter.post("/signup", (req, res) => {
   bcrypt.hash(req.body.password, rounds, (error, hash) => {
     if (error) res.status(500).json(error);
     else {
-
       const newUser = User({
         email: req.body.email,
         role: req.body.role,
@@ -46,7 +45,8 @@ usersRouter.post("/signup", (req, res) => {
         password: hash,
       });
 
-      newUser.save()
+      newUser
+        .save()
         .then((user) => {
           res.status(200).json({ token: generateToken(user) });
         })
@@ -64,7 +64,6 @@ function generateToken(user) {
   return jwt.sign({ data: user.password && user.email }, tokenSecret, {
     expiresIn: "24h",
   });
-  
 }
 
 module.exports = usersRouter;

@@ -2,6 +2,8 @@ const express = require("express");
 const Category = require("../models/category");
 const categoriesRouter = express.Router();
 
+categoriesRouter.use(cors());
+
 //Get all categories
 categoriesRouter.get("/", async (req, res) => {
   try {
