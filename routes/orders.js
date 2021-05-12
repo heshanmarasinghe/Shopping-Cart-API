@@ -16,7 +16,7 @@ ordersRouter.get("/", async (req, res) => {
 });
 
 //Get Order for Customer
-ordersRouter.get("/:id", async (req, res) => {
+ordersRouter.get("/customer/:id", async (req, res) => {
   try {
     let id = req.params.id;
     let selectedOrder = await Order.find({ customerId: id });
