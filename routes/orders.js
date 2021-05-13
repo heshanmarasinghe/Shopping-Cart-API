@@ -62,6 +62,7 @@ ordersRouter.post("/", (req, res) => {
         productId: item.productId,
         productName: item.productName,
         productPrice: item.productPrice,
+        productQty: item.productQty,
       };
       orderItemsArray.push(obj);
     });
