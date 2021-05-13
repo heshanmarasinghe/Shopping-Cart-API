@@ -2,6 +2,7 @@ const express = require("express");
 const Product = require("../models/product");
 const productsRouter = express.Router();
 const cors = require("cors");
+const categories = require("../routes/categories");
 
 productsRouter.use(cors());
 
@@ -38,10 +39,18 @@ productsRouter.post("/", (req, res) => {
       return res.status(400).send("Name cannot be empty!!!");
     }
 
+    let category = req.body.productCategory;
+    
+    if (req.body.productCategory.isNew === true) {
+      //categories.post("/", req.body.productCategory.value) 
+      //Insert new Category Function
+      category = req.body.productCategory.value;
+    }
+
     let newProduct = new Product({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
-      productCategory: req.body.productCategory,
+      productCategory: category,
       productType: req.body.productType,
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
