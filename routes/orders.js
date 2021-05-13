@@ -46,7 +46,7 @@ ordersRouter.post("/", (req, res) => {
       customerId: req.body.customerId,
       customerFirstName: req.body.firstName,
       customerLastName: req.body.lastName,
-      orderTotal: req.body.orderTotal,
+      customerMobile: req.body.customerMobile,
       customerAddress: req.body.customerAddress,
       customerEmail: req.body.customerEmail,
       orderTotal: req.body.orderTotal,

@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const Order = require("../models/order");
 const usersRouter = express.Router();
 const bcrypt = require("bcrypt");
 const rounds = 10;
@@ -7,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
 const cors = require("cors");
+const { count } = require("../models/user");
 
 usersRouter.use(cors());
 
@@ -86,12 +88,36 @@ usersRouter.get("/userby/:id", async (req, res) => {
   try {
     let id = req.params.id;
     let selectedUser = await User.findById(id);
+    let selectedOders = await Order.find({ customerId: id });
 
     if (selectedUser == null) {
       return res.status(404).send("User Not Available!!!");
     }
+    if (selectedOders == null) {
+      return res.status(404).send("Orders Not Available for User!!!");
+    }
 
-    return res.status(200).send(selectedUser);
+    var totalOfOrders = 0;
+    var pendingStatusCount = 0;
+    var completedStatusCount = 0;
+    var orderCount = selectedOders.length;
+
+    for (var i = 0; i < selectedOders.length; i++) {
+      if (Number(selectedOders[i].orderStatus) == 1) {
+        pendingStatusCount = Number(pendingStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 0) {
+        completedStatusCount = Number(completedStatusCount) + 1;
+      }
+      totalOfOrders = Number(totalOfOrders + selectedOders[i].orderTotal);
+    }
+
+    return res.status(200).send({
+      selectedUser,
+      totalOfOrders,
+      pendingStatusCount,
+      completedStatusCount,
+      orderCount,
+    });
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }
@@ -114,7 +140,7 @@ usersRouter.put("/:id", async (req, res) => {
       lastName: req.body.lastName,
       userAddress: req.body.userAddress,
       contactNumber: req.body.contactNumber,
-      isActive: req.body.isActive
+      isActive: req.body.isActive,
     });
     await selectedUser.save();
     return res.status(200).send("User Updated Successfully!!");
