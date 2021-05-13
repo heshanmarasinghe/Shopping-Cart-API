@@ -175,8 +175,14 @@ usersRouter.delete("/:id", async (req, res) => {
 });
 
 usersRouter.get("/jwt-test", middleware.verify, async (req, res) => {
+
   let selectedUser = await User.find({ email: req.user });
-  res.status(200).send(selectedUser);
+
+  if (selectedUser == null) {
+    return res.status(404).send("User Not Available!!!");
+  }
+
+  return res.status(200).send(selectedUser[0]);
 });
 function generateToken(user) {
   return jwt.sign({ data: user.password && user.email }, tokenSecret, {
