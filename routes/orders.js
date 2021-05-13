@@ -15,6 +15,28 @@ ordersRouter.get("/", async (req, res) => {
   }
 });
 
+//Get Orders Status
+ordersRouter.get("/status", async (req, res) => {
+  try {
+    let orders = await Order.find();
+
+    if (orders == null) {
+      return res.status(404).send("Orders Not Available!!!");
+    }
+
+    var orderCount = orders.length;
+    var totalIncome = 0;
+
+    for (var i = 0; i < orders.length; i++) {
+      totalIncome = totalIncome + orders[i].orderTotal;
+    }
+
+    return res.send({  orderCount, totalIncome });
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Get Order for Customer
 ordersRouter.get("/customer/:id", async (req, res) => {
   try {

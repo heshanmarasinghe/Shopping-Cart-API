@@ -100,12 +100,18 @@ usersRouter.get("/userby/:id", async (req, res) => {
     var totalOfOrders = 0;
     var pendingStatusCount = 0;
     var completedStatusCount = 0;
+    var approvedStatusCount = 0;
+    var arrivingStatusCount = 0;
     var orderCount = selectedOders.length;
 
     for (var i = 0; i < selectedOders.length; i++) {
-      if (Number(selectedOders[i].orderStatus) == 1) {
+      if (Number(selectedOders[i].orderStatus) == 0) {
         pendingStatusCount = Number(pendingStatusCount) + 1;
-      } else if (Number(selectedOders[i].orderStatus) == 0) {
+      } else if (Number(selectedOders[i].orderStatus) == 1) {
+        approvedStatusCount = Number(approvedStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 2) {
+        arrivingStatusCount = Number(arrivingStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 3) {
         completedStatusCount = Number(completedStatusCount) + 1;
       }
       totalOfOrders = Number(totalOfOrders + selectedOders[i].orderTotal);
@@ -115,6 +121,8 @@ usersRouter.get("/userby/:id", async (req, res) => {
       selectedUser,
       totalOfOrders,
       pendingStatusCount,
+      approvedStatusCount,
+      arrivingStatusCount,
       completedStatusCount,
       orderCount,
     });
