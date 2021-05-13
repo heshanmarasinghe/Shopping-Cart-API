@@ -53,7 +53,7 @@ ordersRouter.post("/", (req, res) => {
       orderCurrency: req.body.orderCurrency,
       orderDateAdded: Date.now(),
       orderPaymentMethod: req.body.orderPaymentMethod,
-      orderStatus: "1"
+      orderStatus: req.body.orderStatus,
     });
 
     var orderItemsArray = [];
