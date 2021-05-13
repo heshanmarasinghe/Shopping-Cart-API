@@ -26,12 +26,19 @@ ordersRouter.get("/status", async (req, res) => {
 
     var orderCount = orders.length;
     var totalIncome = 0;
+    var pendingOrderCount = 0;
+    var completedOrderCount = 0;
 
     for (var i = 0; i < orders.length; i++) {
       totalIncome = totalIncome + orders[i].orderTotal;
+      if (Number(orders[i].orderStatus) == 0) {
+        pendingOrderCount = Number(pendingOrderCount) + 1;
+      } else if (Number(orders[i].orderStatus) == 3) {
+        completedOrderCount = Number(completedOrderCount) + 1;
+      }
     }
 
-    return res.send({  orderCount, totalIncome });
+    return res.send({  orderCount, totalIncome, pendingOrderCount, completedOrderCount });
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }
