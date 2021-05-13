@@ -15,6 +15,35 @@ ordersRouter.get("/", async (req, res) => {
   }
 });
 
+//Get Orders Status
+ordersRouter.get("/status", async (req, res) => {
+  try {
+    let orders = await Order.find();
+
+    if (orders == null) {
+      return res.status(404).send("Orders Not Available!!!");
+    }
+
+    var orderCount = orders.length;
+    var totalIncome = 0;
+    var pendingOrderCount = 0;
+    var completedOrderCount = 0;
+
+    for (var i = 0; i < orders.length; i++) {
+      totalIncome = totalIncome + orders[i].orderTotal;
+      if (Number(orders[i].orderStatus) == 0) {
+        pendingOrderCount = Number(pendingOrderCount) + 1;
+      } else if (Number(orders[i].orderStatus) == 3) {
+        completedOrderCount = Number(completedOrderCount) + 1;
+      }
+    }
+
+    return res.send({  orderCount, totalIncome, pendingOrderCount, completedOrderCount });
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Get Order for Customer
 ordersRouter.get("/customer/:id", async (req, res) => {
   try {
@@ -46,7 +75,7 @@ ordersRouter.post("/", (req, res) => {
       customerId: req.body.customerId,
       customerFirstName: req.body.firstName,
       customerLastName: req.body.lastName,
-      orderTotal: req.body.orderTotal,
+      customerMobile: req.body.customerMobile,
       customerAddress: req.body.customerAddress,
       customerEmail: req.body.customerEmail,
       orderTotal: req.body.orderTotal,

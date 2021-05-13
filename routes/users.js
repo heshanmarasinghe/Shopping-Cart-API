@@ -1,5 +1,6 @@
 const express = require("express");
 const User = require("../models/user");
+const Order = require("../models/order");
 const usersRouter = express.Router();
 const bcrypt = require("bcrypt");
 const rounds = 10;
@@ -7,6 +8,7 @@ const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
 const cors = require("cors");
+const { count } = require("../models/user");
 
 usersRouter.use(cors());
 
@@ -86,12 +88,44 @@ usersRouter.get("/userby/:id", async (req, res) => {
   try {
     let id = req.params.id;
     let selectedUser = await User.findById(id);
+    let selectedOders = await Order.find({ customerId: id });
 
     if (selectedUser == null) {
       return res.status(404).send("User Not Available!!!");
     }
+    if (selectedOders == null) {
+      return res.status(404).send("Orders Not Available for User!!!");
+    }
 
-    return res.status(200).send(selectedUser);
+    var totalOfOrders = 0;
+    var pendingStatusCount = 0;
+    var completedStatusCount = 0;
+    var approvedStatusCount = 0;
+    var arrivingStatusCount = 0;
+    var orderCount = selectedOders.length;
+
+    for (var i = 0; i < selectedOders.length; i++) {
+      if (Number(selectedOders[i].orderStatus) == 0) {
+        pendingStatusCount = Number(pendingStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 1) {
+        approvedStatusCount = Number(approvedStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 2) {
+        arrivingStatusCount = Number(arrivingStatusCount) + 1;
+      } else if (Number(selectedOders[i].orderStatus) == 3) {
+        completedStatusCount = Number(completedStatusCount) + 1;
+      }
+      totalOfOrders = Number(totalOfOrders + selectedOders[i].orderTotal);
+    }
+
+    return res.status(200).send({
+      selectedUser,
+      totalOfOrders,
+      pendingStatusCount,
+      approvedStatusCount,
+      arrivingStatusCount,
+      completedStatusCount,
+      orderCount,
+    });
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }
@@ -114,7 +148,7 @@ usersRouter.put("/:id", async (req, res) => {
       lastName: req.body.lastName,
       userAddress: req.body.userAddress,
       contactNumber: req.body.contactNumber,
-      isActive: req.body.isActive
+      isActive: req.body.isActive,
     });
     await selectedUser.save();
     return res.status(200).send("User Updated Successfully!!");
@@ -140,8 +174,15 @@ usersRouter.delete("/:id", async (req, res) => {
   }
 });
 
-usersRouter.get("/jwt-test", middleware.verify, (req, res) => {
-  res.status(200).json(req.user);
+usersRouter.get("/jwt-test", middleware.verify, async (req, res) => {
+
+  let selectedUser = await User.find({ email: req.user });
+
+  if (selectedUser == null) {
+    return res.status(404).send("User Not Available!!!");
+  }
+
+  return res.status(200).send(selectedUser[0]);
 });
 function generateToken(user) {
   return jwt.sign({ data: user.password && user.email }, tokenSecret, {
