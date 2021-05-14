@@ -5,7 +5,7 @@ const port = 3000;
 
 const authentication = require("./middleware/authentication");
 const dbConnection = require("./config/db");
-
+const cors = require("cors");
 const products = require("./routes/products");
 const orders = require("./routes/orders");
 const categories = require("./routes/categories");
@@ -17,7 +17,7 @@ const productTypes = require("./routes/productTypes");
 app.use(express.json());
 app.use(cors());
 app.use(authentication);
-
+app.use(cors());
 dbConnection();
 
 app.use("/api/products/", products);

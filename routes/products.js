@@ -1,10 +1,21 @@
 const express = require("express");
 const Product = require("../models/product");
 const productsRouter = express.Router();
-const cors = require("cors");
-const categories = require("../routes/categories");
+const multer = require("multer");
 
-productsRouter.use(cors());
+//Multer Configurations
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+productsRouter.use(express.static(__dirname + "/public"));
+productsRouter.use("/uploads", express.static("uploads"));
 
 //Get all Products
 productsRouter.get("/", async (req, res) => {
@@ -48,20 +59,15 @@ productsRouter.get("/bycategory/:id", async (req, res) => {
   }
 });
 
-
 //Create a new product
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", upload.single("file"), (req, res) => {
   try {
     if (!req.body.productName) {
       return res.status(400).send("Name cannot be empty!!!");
     }
 
-    let category = req.body.productCategory;
-    
-    if (req.body.productCategory.isNew === true) {
-      //categories.post("/", req.body.productCategory.value) 
-      //Insert new Category Function
-      category = req.body.productCategory.value;
+    if (!req.file) {
+      console.log("No file Available");
     }
 
     let newProduct = new Product({
@@ -74,6 +80,7 @@ productsRouter.post("/", (req, res) => {
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
+      productImageUrl: req.file.path,
     });
 
     newProduct.save();
