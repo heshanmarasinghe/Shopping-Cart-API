@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
 const cors = require("cors");
-const { count } = require("../models/user");
+const validator = require("email-validator");
 
 usersRouter.use(cors());
 
@@ -37,44 +37,48 @@ usersRouter.post("/login", (req, res) => {
 });
 
 usersRouter.post("/signup", (req, res) => {
-  User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (!user)
-        bcrypt.hash(req.body.password, rounds, (error, hash) => {
-          if (error) res.status(500).json(error);
-          else {
-            const newUser = User({
-              email: req.body.email,
-              role: req.body.role,
-              firstName: req.body.firstName,
-              lastName: req.body.lastName,
-              userAddress: req.body.userAddress,
-              contactNumber: req.body.contactNumber,
-              isActive: true,
-              password: hash,
-            });
-            newUser
-              .save()
-              .then((user) => {
-                res.status(200).json({ token: generateToken(user) });
-              })
-              .catch((error) => {
-                res.status(500).json(error);
+  if (validator.validate(req.body.email)) {
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user)
+          bcrypt.hash(req.body.password, rounds, (error, hash) => {
+            if (error) res.status(500).json(error);
+            else {
+              const newUser = User({
+                email: req.body.email,
+                role: req.body.role,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                userAddress: req.body.userAddress,
+                contactNumber: req.body.contactNumber,
+                isActive: true,
+                password: hash,
               });
-          }
-        });
-      else {
-        res
-          .status(404)
-          .json({ error: "User has already registered with this email" });
-      }
-    })
-    .catch((error) => {
-      res.status(500).json(error);
-    });
+              newUser
+                .save()
+                .then((user) => {
+                  res.status(200).json({ token: generateToken(user) });
+                })
+                .catch((error) => {
+                  res.status(500).json(error);
+                });
+            }
+          });
+        else {
+          res
+            .status(404)
+            .json({ error: "User has already registered with this email" });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json(error);
+      });
+  } else {
+    res.status(404).json({ error: "invalid mail" });
+  }
 });
 
-usersRouter.get("/", async (req, res) => {
+usersRouter.get("/", middleware.verify, async (req, res) => {
   try {
     let user = await User.find();
     return res.send(user);
@@ -175,7 +179,6 @@ usersRouter.delete("/:id", async (req, res) => {
 });
 
 usersRouter.get("/jwt-test", middleware.verify, async (req, res) => {
-
   let selectedUser = await User.find({ email: req.user });
 
   if (selectedUser == null) {

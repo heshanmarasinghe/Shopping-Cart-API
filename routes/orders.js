@@ -2,6 +2,7 @@ const express = require("express");
 const Order = require("../models/order");
 const ordersRouter = express.Router();
 const cors = require("cors");
+var validator = require("email-validator");
 
 ordersRouter.use(cors());
 
@@ -71,6 +72,10 @@ ordersRouter.post("/", (req, res) => {
       return res.status(400).send("Last Name cannot be empty!!!");
     }
 
+    if (!validator.validate(req.body.customerEmail)) {
+      return res.status(400).send("Email is not Valid!!!");
+    }
+
     let newOrder = new Order({
       customerId: req.body.customerId,
       customerFirstName: req.body.firstName,
@@ -115,6 +120,10 @@ ordersRouter.put("/:id", async (req, res) => {
       return res.status(404).send("Order Not Available!!!");
     }
 
+    if (!validator.validate(req.body.customerEmail)) {
+      return res.status(400).send("Email is not Valid!!!");
+    }
+    
     selectedOrder.set({
       orderStatus: req.body.orderStatus,
     });

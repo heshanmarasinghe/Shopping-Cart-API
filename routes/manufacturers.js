@@ -19,7 +19,7 @@ manufacturersRouter.get("/", async (req, res) => {
 manufacturersRouter.post("/", (req, res) => {
   try {
     if (!req.body.manufacturerName) {
-      return res.status(400).send("manufacturer cannot be empty!!!");
+      return res.status(400).send("Manufacturer cannot be empty!!!");
     }
 
     let newManufacturer = new Manufacturer({
@@ -28,7 +28,7 @@ manufacturersRouter.post("/", (req, res) => {
     });
 
     newManufacturer.save();
-    return res.status(200).send("manufacturer Saved Successfully!!");
+    return res.status(200).send("Manufacturer Saved Successfully!!");
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }
@@ -38,10 +38,10 @@ manufacturersRouter.post("/", (req, res) => {
 manufacturersRouter.put("/:id", async (req, res) => {
   try {
     let id = req.params.id;
-    let selectedManufacturer = await Category.findById(id);
+    let selectedManufacturer = await Manufacturer.findById(id);
 
     if (selectedManufacturer == null) {
-      return res.status(404).send("Category Not Available!!!");
+      return res.status(404).send("Manufacturer Not Available!!!");
     }
 
     selectedManufacturer.set({
@@ -49,7 +49,7 @@ manufacturersRouter.put("/:id", async (req, res) => {
       country: req.body.country,
     });
     await selectedManufacturer.save();
-    return res.status(200).send("Category Updated Successfully!!");
+    return res.status(200).send("Manufacturer Updated Successfully!!");
   } catch (ex) {
     return res.status(500).send("Error :" + ex.Message);
   }

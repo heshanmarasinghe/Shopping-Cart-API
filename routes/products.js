@@ -2,8 +2,19 @@ const express = require("express");
 const Product = require("../models/product");
 const productsRouter = express.Router();
 const cors = require("cors");
-const categories = require("../routes/categories");
+const multer = require("multer");
 
+//Multer Configurations
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 productsRouter.use(cors());
 
 //Get all Products
@@ -32,7 +43,7 @@ productsRouter.get("/:id", async (req, res) => {
   }
 });
 
-//Get Products By Category (t shirt, trousers..)
+//Get Products By Category
 productsRouter.get("/bycategory/:id", async (req, res) => {
   try {
     let id = req.params.id;
@@ -48,32 +59,28 @@ productsRouter.get("/bycategory/:id", async (req, res) => {
   }
 });
 
-
 //Create a new product
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", upload.single("file"), (req, res) => {
   try {
     if (!req.body.productName) {
       return res.status(400).send("Name cannot be empty!!!");
     }
 
-    let category = req.body.productCategory;
-    
-    if (req.body.productCategory.isNew === true) {
-      //categories.post("/", req.body.productCategory.value) 
-      //Insert new Category Function
-      category = req.body.productCategory.value;
+    if (!req.file) {
+      console.log("No file Available");
     }
 
     let newProduct = new Product({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
-      productCategory: category,
+      productCategory: req.body.productCategory,
       productType: req.body.productType,
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
+      productImageUrl: req.file.filename
     });
 
     newProduct.save();
@@ -84,13 +91,17 @@ productsRouter.post("/", (req, res) => {
 });
 
 //Update a Product
-productsRouter.put("/:id", async (req, res) => {
+productsRouter.put("/:id", upload.single("file"), async (req, res) => {
   try {
     let id = req.params.id;
     let selectedProduct = await Product.findById(id);
 
     if (selectedProduct == null) {
       return res.status(404).send("Product Not Available!!!");
+    }
+
+    if (!req.file) {
+      console.log("No file Available");
     }
 
     selectedProduct.set({
@@ -102,6 +113,7 @@ productsRouter.put("/:id", async (req, res) => {
       productPrice: req.body.productPrice,
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
+      productImageUrl: req.file? req.file.filename : req.body.productImageUrl
     });
     await selectedProduct.save();
     return res.status(200).send("Product Updated Successfully!!");
