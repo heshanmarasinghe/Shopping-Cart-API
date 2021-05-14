@@ -34,6 +34,23 @@ categoriesRouter.post("/", (req, res) => {
   }
 });
 
+//Delete a Category
+categoriesRouter.delete("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deleteCategory = await Category.findById(id);
+
+    if (deleteCategory == null) {
+      return res.status(404).send("Category Not Available!!!");
+    }
+
+    deleteCategory.deleteOne({ _id: id });
+    return res.status(200).send("Category Deleted Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 
 
 

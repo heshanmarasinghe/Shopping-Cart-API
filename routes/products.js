@@ -97,5 +97,21 @@ productsRouter.put("/:id", async (req, res) => {
 });
 
 
+//Delete a Product
+productsRouter.delete("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deleteProduct = await Product.findById(id);
+
+    if (deleteProduct == null) {
+      return res.status(404).send("Product Not Available!!!");
+    }
+
+    deleteProduct.deleteOne({ _id: id });
+    return res.status(200).send("Product Deleted Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
 
 module.exports = productsRouter;

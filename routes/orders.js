@@ -54,6 +54,24 @@ ordersRouter.post("/", (req, res) => {
   }
 });
 
+//Delete a Order
+ordersRouter.delete("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let deleteOrder = await Order.findById(id);
+
+    if (deleteOrder == null) {
+      return res.status(404).send("Order Not Available!!!");
+    }
+
+    deleteOrder.deleteOne({ _id: id });
+    return res.status(200).send("Order Deleted Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+
 
 
 module.exports = ordersRouter;
