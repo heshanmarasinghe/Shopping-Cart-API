@@ -8,8 +8,7 @@ const jwt = require("jsonwebtoken");
 const tokenSecret = "my-token-secret";
 const middleware = require("../middleware");
 const cors = require("cors");
-const { count } = require("../models/user");
-var validator = require("email-validator");
+const validator = require("email-validator");
 
 usersRouter.use(cors());
 
