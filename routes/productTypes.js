@@ -33,6 +33,26 @@ productTypesRouter.post("/", (req, res) => {
   }
 });
 
+//Update a ProductType
+productTypesRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let productType = await ProductType.findById(id);
+
+    if (productType == null) {
+      return res.status(404).send("Category Not Available!!!");
+    }
+
+    productType.set({
+      productType: req.body.productType,
+    });
+    await productType.save();
+    return res.status(200).send("Category Updated Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Delete a ProductType
 productTypesRouter.delete("/:id", async (req, res) => {
   try {
