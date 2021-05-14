@@ -82,7 +82,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
-      productImageUrl: req.file.path,
+      productImageUrl: req.file.filename,
     });
 
     newProduct.save();
