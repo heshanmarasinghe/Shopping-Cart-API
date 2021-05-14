@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const path = require('path');
 const port = 3000;
 
 const authentication = require("./middleware/authentication");
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(cors());
 app.use(authentication);
 dbConnection();
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use("/api/products/", products);
 app.use("/api/orders/", orders);

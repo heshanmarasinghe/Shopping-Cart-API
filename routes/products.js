@@ -15,8 +15,8 @@ var storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-productsRouter.use(express.static(__dirname + "/public"));
-productsRouter.use("/uploads", express.static("uploads"));
+// productsRouter.use(express.static(__dirname + "uploads"));
+//productsRouter.use("/uploads", express.static("uploads"));
 productsRouter.use(cors());
 
 //Get all Products
