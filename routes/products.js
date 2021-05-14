@@ -100,6 +100,10 @@ productsRouter.put("/:id", upload.single("file"), async (req, res) => {
       return res.status(404).send("Product Not Available!!!");
     }
 
+    if (!req.file) {
+      console.log("No file Available");
+    }
+
     selectedProduct.set({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
@@ -109,7 +113,7 @@ productsRouter.put("/:id", upload.single("file"), async (req, res) => {
       productPrice: req.body.productPrice,
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
-      productImageUrl: req.file.filename
+      productImageUrl: req.file? req.file.filename : req.body.productImageUrl
     });
     await selectedProduct.save();
     return res.status(200).send("Product Updated Successfully!!");
