@@ -74,7 +74,7 @@ usersRouter.post("/signup", (req, res) => {
     });
 });
 
-usersRouter.get("/", async (req, res) => {
+usersRouter.get("/", middleware.verify, async (req, res) => {
   try {
     let user = await User.find();
     return res.send(user);
@@ -175,7 +175,6 @@ usersRouter.delete("/:id", async (req, res) => {
 });
 
 usersRouter.get("/jwt-test", middleware.verify, async (req, res) => {
-
   let selectedUser = await User.find({ email: req.user });
 
   if (selectedUser == null) {
