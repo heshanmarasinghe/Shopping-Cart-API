@@ -1,8 +1,8 @@
 const express = require("express");
 const Product = require("../models/product");
 const productsRouter = express.Router();
-const multer = require("multer");
 const cors = require("cors");
+const multer = require("multer");
 
 //Multer Configurations
 var storage = multer.diskStorage({
@@ -15,8 +15,6 @@ var storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-// productsRouter.use(express.static(__dirname + "uploads"));
-//productsRouter.use("/uploads", express.static("uploads"));
 productsRouter.use(cors());
 
 //Get all Products

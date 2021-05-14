@@ -15,6 +15,26 @@ brandsRouter.get("/", async (req, res) => {
   }
 });
 
+//Update Brand
+brandsRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedBrand = await Brand.findById(id);
+
+    if (selectedBrand == null) {
+      return res.status(404).send("Brand Not Available!!!");
+    }
+
+    selectedBrand.set({
+      brandName: req.body.brandName
+    });
+    await selectedBrand.save();
+    return res.status(200).send("Brand Updated Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Create a new Brand
 brandsRouter.post("/", (req, res) => {
   try {
