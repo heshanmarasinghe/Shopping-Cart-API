@@ -38,7 +38,7 @@ manufacturersRouter.post("/", (req, res) => {
 manufacturersRouter.put("/:id", async (req, res) => {
   try {
     let id = req.params.id;
-    let selectedManufacturer = await Category.findById(id);
+    let selectedManufacturer = await Manufacturer.findById(id);
 
     if (selectedManufacturer == null) {
       return res.status(404).send("Category Not Available!!!");

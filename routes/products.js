@@ -45,7 +45,7 @@ productsRouter.get("/:id", async (req, res) => {
   }
 });
 
-//Get Products By Category (t shirt, trousers..)
+//Get Products By Category
 productsRouter.get("/bycategory/:id", async (req, res) => {
   try {
     let id = req.params.id;
