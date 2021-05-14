@@ -75,7 +75,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
     let newProduct = new Product({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
-      productCategory: category,
+      productCategory: req.body.productCategory,
       productType: req.body.productType,
       productBrand: req.body.productBrand,
       productPrice: req.body.productPrice,
