@@ -32,6 +32,23 @@ productsRouter.get("/:id", async (req, res) => {
   }
 });
 
+//Get Products By Category (t shirt, trousers..)
+productsRouter.get("/bycategory/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedProduct = await Product.find({ productCategory: id });
+
+    if (selectedProduct == null) {
+      return res.status(404).send("Product Not Available!!!");
+    }
+
+    return res.status(200).send(selectedProduct);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+
 //Create a new product
 productsRouter.post("/", (req, res) => {
   try {
