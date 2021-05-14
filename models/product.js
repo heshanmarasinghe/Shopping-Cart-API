@@ -13,6 +13,7 @@ const productSchema = new mongoose.Schema({
   productDateAdded: Date,
   productQuantity:Number,
   productManufacturer: String,
+  productImageUrl: String,
 });
 
 const product = mongoose.model("Product", productSchema);
