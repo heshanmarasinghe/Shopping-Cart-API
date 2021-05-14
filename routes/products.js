@@ -82,7 +82,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
-      productImageUrl: req.file.filename,
+      productImageUrl: req.file.filename
     });
 
     newProduct.save();
@@ -93,7 +93,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
 });
 
 //Update a Product
-productsRouter.put("/:id", async (req, res) => {
+productsRouter.put("/:id", upload.single("file"), async (req, res) => {
   try {
     let id = req.params.id;
     let selectedProduct = await Product.findById(id);
@@ -111,6 +111,7 @@ productsRouter.put("/:id", async (req, res) => {
       productPrice: req.body.productPrice,
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
+      productImageUrl: req.file.filename
     });
     await selectedProduct.save();
     return res.status(200).send("Product Updated Successfully!!");
