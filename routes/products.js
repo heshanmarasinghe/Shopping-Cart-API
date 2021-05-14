@@ -16,21 +16,7 @@ productsRouter.get("/", async (req, res) => {
   }
 });
 
-//Get One Product
-productsRouter.get("/:id", async (req, res) => {
-  try {
-    let id = req.params.id;
-    let selectedProduct = await Product.findById(id);
 
-    if (selectedProduct == null) {
-      return res.status(404).send("Product Not Available!!!");
-    }
-
-    return res.status(200).send(selectedProduct);
-  } catch (ex) {
-    return res.status(500).send("Error :" + ex.Message);
-  }
-});
 
 //Get Products By Category (t shirt, trousers..)
 productsRouter.get("/bycategory/:id", async (req, res) => {
@@ -110,21 +96,6 @@ productsRouter.put("/:id", async (req, res) => {
   }
 });
 
-//Delete a Product
-productsRouter.delete("/:id", async (req, res) => {
-  try {
-    let id = req.params.id;
-    let deleteProduct = await Product.findById(id);
 
-    if (deleteProduct == null) {
-      return res.status(404).send("Product Not Available!!!");
-    }
-
-    deleteProduct.deleteOne({ _id: id });
-    return res.status(200).send("Product Deleted Successfully!!");
-  } catch (ex) {
-    return res.status(500).send("Error :" + ex.Message);
-  }
-});
 
 module.exports = productsRouter;

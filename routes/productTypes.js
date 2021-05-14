@@ -53,21 +53,6 @@ productTypesRouter.put("/:id", async (req, res) => {
   }
 });
 
-//Delete a ProductType
-productTypesRouter.delete("/:id", async (req, res) => {
-  try {
-    let id = req.params.id;
-    let productType = await ProductType.findById(id);
 
-    if (productType == null) {
-      return res.status(404).send("ProductType Not Available!!!");
-    }
-
-    productType.deleteOne({ _id: id });
-    return res.status(200).send("ProductType Deleted Successfully!!");
-  } catch (ex) {
-    return res.status(500).send("Error :" + ex.Message);
-  }
-});
 
 module.exports = productTypesRouter;
