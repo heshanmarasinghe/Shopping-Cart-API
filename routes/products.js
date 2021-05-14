@@ -68,7 +68,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
       return res.status(400).send("Name cannot be empty!!!");
     }
 
-    if (!req.file) {
+    if (!req.attachment[0]) {
       console.log("No file Available");
     }
 
@@ -82,7 +82,7 @@ productsRouter.post("/", upload.single("file"), (req, res) => {
       productDateAdded: Date.now(),
       productQuantity: req.body.productQuantity,
       productManufacturer: req.body.productManufacturer,
-      productImageUrl: req.file.path,
+      productImageUrl: req.attachment[0].path,
     });
 
     newProduct.save();
