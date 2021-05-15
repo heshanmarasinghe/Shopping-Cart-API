@@ -16,7 +16,23 @@ categoriesRouter.get("/", async (req, res) => {
   }
 });
 
+//Create a new category
+categoriesRouter.post("/", (req, res) => {
+  try {
+    if (!req.body.categoryType) {
+      return res.status(400).send("Category type cannot be empty!!!");
+    }
 
+    let newCategory = new Category({
+      categoryType: req.body.categoryType,
+    });
+
+    newCategory.save();
+    return res.status(200).send("Category Saved Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
 
 //Update a Category
 categoriesRouter.put("/:id", async (req, res) => {
