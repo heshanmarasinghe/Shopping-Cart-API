@@ -2,12 +2,64 @@ const express = require("express");
 const Order = require("../models/order");
 const ordersRouter = express.Router();
 const cors = require("cors");
+var validator = require("email-validator");
 
 ordersRouter.use(cors());
 
+//Get all Orders
+ordersRouter.get("/", async (req, res) => {
+  try {
+    let orders = await Order.find();
+    return res.send(orders);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
 
+//Get Orders Status
+ordersRouter.get("/status", async (req, res) => {
+  try {
+    let orders = await Order.find();
 
+    if (orders == null) {
+      return res.status(404).send("Orders Not Available!!!");
+    }
 
+    var orderCount = orders.length;
+    var totalIncome = 0;
+    var pendingOrderCount = 0;
+    var completedOrderCount = 0;
+
+    for (var i = 0; i < orders.length; i++) {
+      totalIncome = totalIncome + orders[i].orderTotal;
+      if (Number(orders[i].orderStatus) == 0) {
+        pendingOrderCount = Number(pendingOrderCount) + 1;
+      } else if (Number(orders[i].orderStatus) == 3) {
+        completedOrderCount = Number(completedOrderCount) + 1;
+      }
+    }
+
+    return res.send({  orderCount, totalIncome, pendingOrderCount, completedOrderCount });
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+//Get Order for Customer
+ordersRouter.get("/customer/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedOrder = await Order.find({ customerId: id });
+
+    if (selectedOrder == null) {
+      return res.status(404).send("Orders Not Available!!!");
+    }
+
+    return res.status(200).send(selectedOrder);
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
 
 //Create a new Order
 ordersRouter.post("/", (req, res) => {
@@ -18,6 +70,10 @@ ordersRouter.post("/", (req, res) => {
 
     if (!req.body.lastName) {
       return res.status(400).send("Last Name cannot be empty!!!");
+    }
+
+    if (!validator.validate(req.body.customerEmail)) {
+      return res.status(400).send("Email is not Valid!!!");
     }
 
     let newOrder = new Order({
@@ -54,6 +110,30 @@ ordersRouter.post("/", (req, res) => {
   }
 });
 
+//Update a Order Status
+ordersRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedOrder = await Order.findById(id);
+
+    if (selectedOrder == null) {
+      return res.status(404).send("Order Not Available!!!");
+    }
+
+    if (!validator.validate(req.body.customerEmail)) {
+      return res.status(400).send("Email is not Valid!!!");
+    }
+    
+    selectedOrder.set({
+      orderStatus: req.body.orderStatus,
+    });
+    await selectedOrder.save();
+    return res.status(200).send("Order Status Updated Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
 //Delete a Order
 ordersRouter.delete("/:id", async (req, res) => {
   try {
@@ -70,8 +150,5 @@ ordersRouter.delete("/:id", async (req, res) => {
     return res.status(500).send("Error :" + ex.Message);
   }
 });
-
-
-
 
 module.exports = ordersRouter;
