@@ -34,6 +34,27 @@ categoriesRouter.post("/", (req, res) => {
   }
 });
 
+//Update a Category
+categoriesRouter.put("/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let selectedCategory = await Category.findById(id);
+
+    if (selectedCategory == null) {
+      return res.status(404).send("Category Not Available!!!");
+    }
+
+    selectedCategory.set({
+      categoryType: req.body.categoryType,
+    });
+    await selectedCategory.save();
+    return res.status(200).send("Category Updated Successfully!!");
+  } catch (ex) {
+    return res.status(500).send("Error :" + ex.Message);
+  }
+});
+
+
 //Delete a Category
 categoriesRouter.delete("/:id", async (req, res) => {
   try {
