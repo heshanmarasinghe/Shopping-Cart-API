@@ -35,39 +35,7 @@ productsRouter.get("/bycategory/:id", async (req, res) => {
 });
 
 
-//Create a new product
-productsRouter.post("/", (req, res) => {
-  try {
-    if (!req.body.productName) {
-      return res.status(400).send("Name cannot be empty!!!");
-    }
 
-    let category = req.body.productCategory;
-    
-    if (req.body.productCategory.isNew === true) {
-      //categories.post("/", req.body.productCategory.value) 
-      //Insert new Category Function
-      category = req.body.productCategory.value;
-    }
-
-    let newProduct = new Product({
-      productName: req.body.productName,
-      productDescription: req.body.productDescription,
-      productCategory: category,
-      productType: req.body.productType,
-      productBrand: req.body.productBrand,
-      productPrice: req.body.productPrice,
-      productDateAdded: Date.now(),
-      productQuantity: req.body.productQuantity,
-      productManufacturer: req.body.productManufacturer,
-    });
-
-    newProduct.save();
-    return res.status(200).send("Product Saved Successfully!!");
-  } catch (ex) {
-    return res.status(500).send("Error :" + ex.Message);
-  }
-});
 
 //Update a Product
 productsRouter.put("/:id", async (req, res) => {

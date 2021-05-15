@@ -15,23 +15,7 @@ brandsRouter.get("/", async (req, res) => {
   }
 });
 
-//Create a new Brand
-brandsRouter.post("/", (req, res) => {
-  try {
-    if (!req.body.brandName) {
-      return res.status(400).send("Brand Name cannot be empty!!!");
-    }
 
-    let newBrand = new Brand({
-      brandName: req.body.brandName,
-    });
-
-    newBrand.save();
-    return res.status(200).send("Brand Saved Successfully!!");
-  } catch (ex) {
-    return res.status(500).send("Error :" + ex.Message);
-  }
-});
 
 //Delete a Brand
 brandsRouter.delete("/:id", async (req, res) => {
